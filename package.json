@@ -1,7 +1,24 @@
 {
-  "name": "temp-app",
-  "private": true,
-  "version": "0.0.0",
+  "name": "audio-evaluation-tools",
+  "version": "1.0.0",
+  "description": "A web-based tool for comparing audio model outputs side-by-side",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "audio",
+    "comparison",
+    "evaluation",
+    "tts",
+    "svs",
+    "speech",
+    "music",
+    "react",
+    "typescript"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",

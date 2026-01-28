@@ -1,74 +1,105 @@
-# Audio Comparison Tool
+# 🎵 Audio Evaluation Tools
 
-A React-based web application for comparing audio model outputs side-by-side.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Features
+A powerful, web-based audio evaluation toolkit designed for comparing and assessing multiple audio variants side-by-side. Perfect for TTS (Text-to-Speech), SVS (Singing Voice Synthesis), music generation, and speech model evaluation.
 
-- Compare multiple audio variants (Ground Truth, rebuilds, etc.)
-- Tag audio quality (Good, Maybe, Bad) with persistence
-- Side-by-side lyrics comparison with diff highlighting
-- Support for multiple experiments via URL paths
-- Export tags as JSON
+![Audio Evaluation Tools Screenshot](https://via.placeholder.com/800x400?text=Audio+Evaluation+Tools+Screenshot)
 
-## Prerequisites
+## ✨ Features
 
-- Node: 20.19+ or 22.12+
-- Recommended: install via nvm
+- **🎧 Side-by-Side Comparison** - Compare multiple audio variants (Ground Truth, model outputs, etc.) in a clean grid layout
+- **🏷️ Quality Tagging** - Tag audio quality with intuitive Good/Maybe/Bad ratings
+- **💾 Persistent Storage** - Tags are automatically saved to localStorage with per-experiment isolation
+- **📤 Export Results** - Export all tags and statistics as JSON for further analysis
+- **📝 Lyrics Diff View** - Visual diff highlighting for lyrics comparison against Ground Truth
+- **🔬 Multi-Experiment Support** - Run multiple experiments simultaneously via URL paths
+- **📱 Responsive Design** - Works on desktop and tablet devices
+- **⚡ Fast & Lightweight** - Built with Vite for lightning-fast development and builds
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js**: 20.19+ or 22.12+ (recommended)
+- **npm** or **yarn**
 
 ```bash
-# Install nvm (skip if already installed)
+# Install Node.js via nvm (recommended)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-. ~/.nvm/nvm.sh
-
-# Install and use Node 22
 nvm install 22
 nvm use 22
 ```
 
-## Quick Start
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd audio-evaluation-tools
+
+# Install dependencies
 npm install
 
-# Copy your audio data (see Data Preparation below)
+# Prepare your audio data (see Data Preparation)
 npm run copy-audio -- /path/to/your/data.json -f my-experiment
 
+# Start development server
 npm run dev
 ```
 
-Open browser at `http://localhost:30767/my-experiment`
+Open your browser at `http://localhost:30767/my-experiment`
 
-## Data Preparation
+## 📊 Data Preparation
 
-### 1. Prepare your JSON file
+### JSON Format
 
-Format:
+Your data file should follow this structure:
 
 ```json
 {
-  "uuid1": [
+  "uuid-1": [
     {
       "melody_GT": {
         "wav": "/absolute/path/to/gt.mp3",
-        "lyrics": "original lyrics"
+        "lyrics": "Original lyrics here"
       }
     },
     {
-      "rebuild_01": {
-        "wav": "/absolute/path/to/rebuild.wav",
-        "lyrics": "rebuild lyrics"
+      "rebuild_v1": {
+        "wav": "/absolute/path/to/rebuild1.wav",
+        "lyrics": "Rebuild lyrics here"
+      }
+    },
+    {
+      "rebuild_v2": {
+        "wav": "/absolute/path/to/rebuild2.wav",
+        "lyrics": "Another version"
       }
     }
+  ],
+  "uuid-2": [
+    ...
   ]
 }
 ```
 
-### 2. Copy audio files
+**Notes:**
+- Each UUID represents one comparison group
+- `melody_GT` is treated specially as the "Ground Truth" reference
+- Audio paths can be absolute local paths or HTTP/HTTPS URLs
+- Multiple variants can be included per UUID
+
+### Copy Audio Files
 
 Use the provided script to copy audio files and generate the processed JSON:
 
 ```bash
-# Basic usage (default folder)
+# Basic usage - copies to default folder
 npm run copy-audio -- /path/to/data.json
 
 # Specify experiment folder (accessible at /exp1)
@@ -79,11 +110,16 @@ npm run copy-audio -- /data/baseline.json -f baseline
 npm run copy-audio -- /data/model-v2.json -f model-v2
 ```
 
+The script will:
+1. Copy all audio files to `public/audio/`
+2. Generate a processed JSON with relative paths
+3. Output to `public/data/{folder}/data.json`
+
 See [scripts/README.md](scripts/README.md) for detailed usage.
 
-## Multi-Experiment Support
+## 🔬 Multi-Experiment Support
 
-You can host multiple experiments simultaneously and access them via different URLs:
+You can host multiple experiments simultaneously:
 
 ```bash
 # Setup experiment 1
@@ -95,27 +131,21 @@ npm run copy-audio -- /data/exp2.json -f exp2
 
 Access URLs:
 
-- `http://localhost:30767/exp1` - Experiment 1
-- `http://localhost:30767/exp2` - Experiment 2
+| URL Path | Data Source | Use Case |
+|----------|-------------|----------|
+| `/` | `/data/default/data.json` | Default experiment |
+| `/exp1` | `/data/exp1/data.json` | Experiment 1 |
+| `/model-v2` | `/data/model-v2/data.json` | Model comparison |
 
 Each experiment has:
-
 - Isolated data loading
 - Separate tag storage in localStorage
 - Independent export functionality
 
-## URL Routing
-
-| URL Path    | Data Source                  | Use Case           |
-| ----------- | ---------------------------- | ------------------ |
-| `/`         | `/datas3/default/data.json`  | Default experiment |
-| `/exp1`     | `/datas3/exp1/data.json`     | Experiment 1       |
-| `/model-v2` | `/datas3/model-v2/data.json` | Model comparison   |
-
-## Development
+## 🛠️ Development
 
 ```bash
-# Start dev server
+# Start development server
 npm run dev
 
 # Build for production
@@ -128,37 +158,117 @@ npm run preview
 npm run lint
 ```
 
-## Project Structure
+## 📁 Project Structure
 
 ```
+audio-evaluation-tools/
 ├── public/
 │   ├── audio/              # Audio files (auto-generated)
-│   └── data/               # Experiment data folders
-│       ├── default/
-│       ├── exp1/
-│       └── ...
+│   ├── data/               # Experiment data folders
+│   │   ├── default/
+│   │   ├── exp1/
+│   │   └── ...
+│   ├── favicon.svg         # Favicon
+│   └── logo.svg            # Logo
 ├── scripts/
 │   └── copy-audio-files.cjs  # Audio file copy script
 ├── src/
 │   ├── components/         # React components
-│   ├── App.tsx            # Main app with routing logic
-│   └── types.ts           # TypeScript types
-└── vite.config.ts         # Vite configuration
+│   │   ├── AudioComparisonRow.tsx
+│   │   ├── AudioPlayer.tsx
+│   │   ├── LyricsDisplay.tsx
+│   │   └── TagButton.tsx
+│   ├── utils/
+│   │   └── diff.ts         # Lyrics diff utilities
+│   ├── types.ts            # TypeScript type definitions
+│   ├── App.tsx            # Main application
+│   ├── main.tsx           # Entry point
+│   └── index.css          # Global styles
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── tailwind.config.js
+├── LICENSE
+└── CONTRIBUTING.md
 ```
 
-## Exporting Tags
+## 📤 Exporting Tags
 
-Tags are automatically saved to localStorage per experiment. You can export them as JSON by clicking the "Export" button in the header.
+Tags are automatically saved to localStorage. Click the **Export** button in the header to download a JSON file containing:
+
+```json
+{
+  "experiment": "my-experiment",
+  "exportedAt": "2026-01-28T12:00:00.000Z",
+  "tags": {
+    "uuid-1": {
+      "rebuild_v1": "good",
+      "rebuild_v2": "bad"
+    }
+  },
+  "summary": {
+    "total": 2,
+    "good": 1,
+    "maybe": 0,
+    "bad": 1
+  }
+}
+```
+
+## 🎨 Customization
+
+### Styling
+
+The project uses [Tailwind CSS](https://tailwindcss.com/). Customize the theme in `tailwind.config.js`:
+
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Add your custom colors
+      },
+    },
+  },
+}
+```
+
+### Tag Options
+
+Modify tag options in `src/components/TagButton.tsx`:
+
+```typescript
+const tagOptions = [
+  { value: 'good', label: 'Good', ... },
+  { value: 'maybe', label: 'Maybe', ... },
+  { value: 'bad', label: 'Bad', ... },
+  // Add your own tags
+];
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [React](https://reactjs.org/) and [Vite](https://vitejs.dev/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Diff highlighting powered by [diff](https://github.com/kpdecker/jsdiff)
 
 ---
 
-## Technical Details
-
-This project uses:
-
-- React + TypeScript
-- Vite for build tooling
-- Tailwind CSS for styling
-- `diff` library for lyrics comparison
-
-For ESLint configuration details, see the original [Vite React template documentation](https://vitejs.dev/guide/).
+<p align="center">Made with ❤️ for the audio research community</p>

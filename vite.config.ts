@@ -9,7 +9,7 @@ export default defineConfig({
     {
       name: 'spa-fallback',
       configureServer(server) {
-        server.middlewares.use((req, res, next) => {
+        server.middlewares.use((req, _res, next) => {
           // Handle routes like /exp1, /exp2, /exp-name, etc.
           // Skip API paths, file paths, and root
           if (req.url && 

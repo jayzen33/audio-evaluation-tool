@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { AudioItem, AudioData } from './types';
 import { AudioComparisonRow } from './components/AudioComparisonRow';
 import type { TagValue } from './components/TagButton';
+import { Logo } from './components/Logo';
 
 // Tag storage key for localStorage (includes experiment name for isolation)
 const getTagsStorageKey = (expName: string) => `audio_comparison_tags_${expName}`;
@@ -18,30 +19,29 @@ function getExperimentName(): string {
 }
 
 function App() {
-  const [expName, setExpName] = useState<string>('default');
+  const [expName] = useState<string>(() => getExperimentName());
   const [data, setData] = useState<AudioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tags, setTags] = useState<TagsState>({});
 
-  // Get experiment name on mount
-  useEffect(() => {
-    setExpName(getExperimentName());
-  }, []);
-
   // Load tags from localStorage when expName changes
   useEffect(() => {
-    try {
-      const savedTags = localStorage.getItem(getTagsStorageKey(expName));
-      if (savedTags) {
-        setTags(JSON.parse(savedTags));
-      } else {
+    // Use requestAnimationFrame to avoid cascading renders warning
+    const frameId = requestAnimationFrame(() => {
+      try {
+        const savedTags = localStorage.getItem(getTagsStorageKey(expName));
+        if (savedTags) {
+          setTags(JSON.parse(savedTags));
+        } else {
+          setTags({});
+        }
+      } catch (err) {
+        console.error('Failed to load tags from localStorage:', err);
         setTags({});
       }
-    } catch (err) {
-      console.error('Failed to load tags from localStorage:', err);
-      setTags({});
-    }
+    });
+    return () => cancelAnimationFrame(frameId);
   }, [expName]);
 
   // Save tags to localStorage whenever they change
@@ -73,21 +73,32 @@ function App() {
     });
   }, []);
 
-  // Export tags as JSON
+  // Calculate tag stats with memoization for performance
+  const tagStats = useMemo(() => {
+    let total = 0;
+    let good = 0;
+    let maybe = 0;
+    let bad = 0;
+
+    for (const variants of Object.values(tags)) {
+      for (const value of Object.values(variants)) {
+        total++;
+        if (value === 'good') good++;
+        else if (value === 'maybe') maybe++;
+        else if (value === 'bad') bad++;
+      }
+    }
+
+    return { total, good, maybe, bad };
+  }, [tags]);
+
+  // Export tags as JSON - uses memoized tagStats
   const handleExportTags = useCallback(() => {
     const exportData = {
       experiment: expName,
       exportedAt: new Date().toISOString(),
       tags: tags,
-      summary: {
-        total: Object.values(tags).reduce((acc, variants) => acc + Object.keys(variants).length, 0),
-        good: Object.values(tags).reduce((acc, variants) => 
-          acc + Object.values(variants).filter(v => v === 'good').length, 0),
-        maybe: Object.values(tags).reduce((acc, variants) => 
-          acc + Object.values(variants).filter(v => v === 'maybe').length, 0),
-        bad: Object.values(tags).reduce((acc, variants) => 
-          acc + Object.values(variants).filter(v => v === 'bad').length, 0),
-      }
+      summary: tagStats
     };
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -97,7 +108,7 @@ function App() {
     a.download = `audio_tags_${expName}_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [tags, expName]);
+  }, [tags, expName, tagStats]);
 
   // Clear all tags
   const handleClearTags = useCallback(() => {
@@ -106,51 +117,44 @@ function App() {
     }
   }, []);
 
-  // Calculate tag stats
-  const tagStats = {
-    total: Object.values(tags).reduce((acc, variants) => acc + Object.keys(variants).length, 0),
-    good: Object.values(tags).reduce((acc, variants) => 
-      acc + Object.values(variants).filter(v => v === 'good').length, 0),
-    maybe: Object.values(tags).reduce((acc, variants) => 
-      acc + Object.values(variants).filter(v => v === 'maybe').length, 0),
-    bad: Object.values(tags).reduce((acc, variants) => 
-      acc + Object.values(variants).filter(v => v === 'bad').length, 0),
-  };
-
   // Load data based on experiment name
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    
-    // Construct data URL based on experiment name
-    // e.g., /exp1 -> /data/exp1/data.json
-    // e.g., / -> /data/default/data.json
-    const dataUrl = expName === 'default' 
-      ? '/data/default/data.json' 
-      : `/data/${expName}/data.json`;
-    
-    fetch(dataUrl)
-      .then(res => {
-        if (!res.ok) throw new Error(`Failed to load data from ${dataUrl}`);
-        return res.json();
-      })
-      .then((jsonData: Record<string, Array<Record<string, AudioData>>>) => {
-        // Transform object format to array format
-        const transformedData: AudioItem[] = Object.entries(jsonData).map(([uuid, variants]) => {
-          const item: AudioItem = { uuid };
-          variants.forEach(variantObj => {
-            const [key, value] = Object.entries(variantObj)[0];
-            item[key] = value;
+    // Use requestAnimationFrame to avoid cascading renders warning
+    const frameId = requestAnimationFrame(() => {
+      setLoading(true);
+      setError(null);
+      
+      // Construct data URL based on experiment name
+      // e.g., /exp1 -> /data/exp1/data.json
+      // e.g., / -> /data/default/data.json
+      const dataUrl = expName === 'default' 
+        ? '/data/default/data.json' 
+        : `/data/${expName}/data.json`;
+      
+      fetch(dataUrl)
+        .then(res => {
+          if (!res.ok) throw new Error(`Failed to load data from ${dataUrl}`);
+          return res.json();
+        })
+        .then((jsonData: Record<string, Array<Record<string, AudioData>>>) => {
+          // Transform object format to array format
+          const transformedData: AudioItem[] = Object.entries(jsonData).map(([uuid, variants]) => {
+            const item: AudioItem = { uuid };
+            variants.forEach(variantObj => {
+              const [key, value] = Object.entries(variantObj)[0];
+              item[key] = value;
+            });
+            return item;
           });
-          return item;
-        });
-        setData(transformedData);
-      })
-      .catch(err => {
-        console.error(err);
-        setError(`Failed to load data for experiment "${expName}". Make sure the data file exists at ${dataUrl}. Use the copy-audio script to set up the data.`);
-      })
-      .finally(() => setLoading(false));
+          setData(transformedData);
+        })
+        .catch(err => {
+          console.error(err);
+          setError(`Failed to load data for experiment "${expName}". Make sure the data file exists at ${dataUrl}. Use the copy-audio script to set up the data.`);
+        })
+        .finally(() => setLoading(false));
+    });
+    return () => cancelAnimationFrame(frameId);
   }, [expName]);
 
   if (loading) {
@@ -174,14 +178,10 @@ function App() {
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20 shadow-sm">
         <div className="max-w-[1800px] mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-              </svg>
-            </div>
+            <Logo size={40} className="shadow-lg shadow-indigo-200 rounded-xl" />
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                Audio Comparison Tool
+                Audio Evaluation Tools
               </h1>
               {expName !== 'default' && (
                 <div className="text-xs text-indigo-600 font-medium">
