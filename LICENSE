@@ -1,16 +1,39 @@
-MIT License
+Custom License with Commercial Restrictions
 
-Copyright (c) 2026 Audio Compare Contributors
+Copyright (c) 2026 Audio Evaluation Tools Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Non-Commercial and Small-Scale Commercial Use
+   The Software may be used for:
+   - Personal, educational, and research purposes
+   - Internal use within an organization
+   - Small-scale commercial use (e.g., individual consultants, small businesses
+     with fewer than 50 employees)
+
+2. Widespread Commercial Use Restriction
+   Widespread commercial use of the Software is prohibited without prior written
+   permission. This includes, but is not limited to:
+   - Using the Software as a core component of a commercial product or service
+     offered to the general public
+   - Redistributing the Software as part of a paid software package
+   - Using the Software in large-scale commercial operations (organizations with
+     50 or more employees)
+   - Offering the Software or derivatives thereof as a hosted service (SaaS) for
+     commercial purposes
+
+   Organizations seeking to use the Software for widespread commercial purposes
+   must contact the copyright holders to obtain a commercial license.
+
+3. Attribution
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+4. Derivative Works
+   Derivative works must include a prominent notice stating that they are based
+   on this Software and must be distributed under the same license terms.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
