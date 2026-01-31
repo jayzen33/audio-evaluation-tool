@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
 import { AudioPlayer } from '../components/AudioPlayer';
-import { LyricsDisplay } from '../components/LyricsDisplay';
+import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
 
 // Selection storage key for localStorage
@@ -28,8 +28,8 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
   const { uuid, ...variants } = item;
 
   const gtData = variants['melody_GT'];
-  const gtLyricsText = isAudioData(gtData) 
-    ? gtData.lyrics
+  const gtContentText = isAudioData(gtData) 
+    ? gtData.content
     : undefined;
 
   // Filter out ground truth from selectable options
@@ -91,8 +91,8 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <AudioPlayer src={gtData.wav} isGt={true} />
-            <LyricsDisplay 
-              text={gtData.lyrics} 
+            <ContentDisplay 
+              text={gtData.content} 
               className="h-24 overflow-y-auto"
               isGt={true}
             />
@@ -109,7 +109,7 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
             if (!isAudioData(data)) return null;
 
             const audioSrc = data.wav;
-            const lyricsText = data.lyrics;
+            const contentText = data.content;
             const isThisSelected = selectedVariant === key;
             const displayLabel = blindMode 
               ? `Option ${String.fromCharCode(65 + idx)}` // A, B, C, D...
@@ -156,11 +156,11 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
                   <AudioPlayer src={audioSrc} isGt={false} />
                 </div>
                 
-                {/* Lyrics */}
+                {/* Content */}
                 <div>
-                  <LyricsDisplay 
-                    text={lyricsText} 
-                    originalText={gtLyricsText}
+                  <ContentDisplay 
+                    text={contentText} 
+                    originalText={gtContentText}
                     className="h-32 overflow-y-auto"
                     isGt={false}
                   />

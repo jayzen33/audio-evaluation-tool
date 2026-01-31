@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
 import { AudioPlayer } from '../components/AudioPlayer';
-import { LyricsDisplay } from '../components/LyricsDisplay';
+import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
 
 // Scores storage key for localStorage
@@ -39,8 +39,8 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
   const { uuid, ...variants } = item;
 
   const gtData = variants['melody_GT'];
-  const gtLyricsText = isAudioData(gtData) 
-    ? gtData.lyrics
+  const gtContentText = isAudioData(gtData) 
+    ? gtData.content
     : undefined;
 
   // Get all variant keys (including ground truth if present)
@@ -95,7 +95,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
             if (!isAudioData(data)) return null;
 
             const audioSrc = data.wav;
-            const lyricsText = data.lyrics;
+            const contentText = data.content;
             const isGt = key === 'melody_GT';
             const scoreKey = `${uuid}:${key}`;
             const currentScore = scores[scoreKey] || null;
@@ -135,9 +135,9 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                     <AudioPlayer src={audioSrc} isGt={isGt} />
                     
                     <div className="mt-3">
-                      <LyricsDisplay 
-                        text={lyricsText} 
-                        originalText={isGt ? undefined : gtLyricsText}
+                      <ContentDisplay 
+                        text={contentText} 
+                        originalText={isGt ? undefined : gtContentText}
                         className="h-24 overflow-y-auto"
                         isGt={isGt}
                       />

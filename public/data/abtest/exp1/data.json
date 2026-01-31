@@ -3,25 +3,25 @@
     {
       "melody_GT": {
         "wav": "/audio/test_song_alpha_melody_GT_gt.mp3",
-        "lyrics": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
       }
     },
     {
       "baseline": {
         "wav": "/audio/test_song_alpha_baseline_b1.wav",
-        "lyrics": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
       }
     },
     {
       "variant_a": {
         "wav": "/audio/test_song_alpha_model_a_m1.wav",
-        "lyrics": "Let it be, let it be, let it be, let it be. Whisper some wisdom, let it be."
+        "content": "Let it be, let it be, let it be, let it be. Whisper some wisdom, let it be."
       }
     },
     {
       "variant_b": {
         "wav": "/audio/test_song_alpha_model_b_m2.wav",
-        "lyrics": "Let it be, let it be, let it be, oh let it be. Whisper words of wisdom, let it be."
+        "content": "Let it be, let it be, let it be, oh let it be. Whisper words of wisdom, let it be."
       }
     }
   ],
@@ -29,19 +29,19 @@
     {
       "melody_GT": {
         "wav": "/audio/test_song_beta_melody_GT_gt.mp3",
-        "lyrics": "Hey Jude, don't make it bad. Take a sad song and make it better."
+        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
       }
     },
     {
       "baseline": {
         "wav": "/audio/test_song_beta_baseline_b1.wav",
-        "lyrics": "Hey Jude, don't make it bad. Take a sad song and make it better."
+        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
       }
     },
     {
       "variant_a": {
         "wav": "/audio/test_song_beta_model_a_m1.wav",
-        "lyrics": "Hey Jude, don't make it bad. Take a sad tune and make it better."
+        "content": "Hey Jude, don't make it bad. Take a sad tune and make it better."
       }
     }
   ]

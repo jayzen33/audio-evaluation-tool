@@ -4,7 +4,7 @@ A web-based toolkit for audio quality evaluation, supporting comparison tagging,
 
 ## Features
 
-- **Comparison** - Tag audio variants as Good/Maybe/Bad with lyrics diff
+- **Comparison** - Tag audio variants as Good/Maybe/Bad with content diff
 - **AB Test** - Blind or labeled preference testing
 - **MOS Scoring** - Rate audio quality on 1-5 scale
 - **Multi-Experiment** - Run multiple experiments via URL paths
@@ -34,8 +34,8 @@ Create a JSON file with your audio data:
 ```json
 {
   "sample-1": [
-    { "melody_GT": { "wav": "/audio/gt.mp3", "lyrics": "Original lyrics" } },
-    { "model_a": { "wav": "/audio/a.wav", "lyrics": "Model output" } }
+    { "melody_GT": { "wav": "/audio/gt.mp3", "content": "Ground truth transcript" } },
+    { "model_a": { "wav": "/audio/a.wav", "content": "Model output transcript" } }
   ]
 }
 ```

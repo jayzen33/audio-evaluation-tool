@@ -3,25 +3,25 @@
     {
       "melody_GT": {
         "wav": "/audio/experiment_2_song_1_melody_GT_original.mp3",
-        "lyrics": "Hotel California, such a lovely place, such a lovely face. Plenty of room at the Hotel California, any time of year, you can find it here."
+        "content": "Hotel California, such a lovely place, such a lovely face. Plenty of room at the Hotel California, any time of year, you can find it here."
       }
     },
     {
       "variant_v1": {
         "wav": "/audio/experiment_2_song_1_variant_v1_v1.wav",
-        "lyrics": "Hotel California, such a lovely place, such a lovely face. Plenty of room at the Hotel California, any time of year, you can find it here."
+        "content": "Hotel California, such a lovely place, such a lovely face. Plenty of room at the Hotel California, any time of year, you can find it here."
       }
     },
     {
       "variant_v2": {
         "wav": "/audio/experiment_2_song_1_variant_v2_v2.wav",
-        "lyrics": "Hotel California, such a nice place, such a pretty face. Plenty of space at the Hotel California, any time of year, you can find us here."
+        "content": "Hotel California, such a nice place, such a pretty face. Plenty of space at the Hotel California, any time of year, you can find us here."
       }
     },
     {
       "variant_v3": {
         "wav": "/audio/experiment_2_song_1_variant_v3_v3.wav",
-        "lyrics": "Hotel California, such a lovely place with a lovely face. So much room at the Hotel California, any season, you can find it here."
+        "content": "Hotel California, such a lovely place with a lovely face. So much room at the Hotel California, any season, you can find it here."
       }
     }
   ],
@@ -29,31 +29,31 @@
     {
       "melody_GT": {
         "wav": "/audio/experiment_2_song_2_melody_GT_original.mp3",
-        "lyrics": "Sweet home Alabama, where the skies are so blue. Sweet home Alabama, Lord I'm coming home to you."
+        "content": "Sweet home Alabama, where the skies are so blue. Sweet home Alabama, Lord I'm coming home to you."
       }
     },
     {
       "variant_v1": {
         "wav": "/audio/experiment_2_song_2_variant_v1_v1.wav",
-        "lyrics": "Sweet home Alabama, where the skies are so blue. Sweet home Alabama, Lord I'm coming home to you."
+        "content": "Sweet home Alabama, where the skies are so blue. Sweet home Alabama, Lord I'm coming home to you."
       }
     },
     {
       "variant_v2": {
         "wav": "/audio/experiment_2_song_2_variant_v2_v2.wav",
-        "lyrics": "Sweet home Alabama, where the sky is so blue. Sweet home Alabama, Lord I'm going home to you."
+        "content": "Sweet home Alabama, where the sky is so blue. Sweet home Alabama, Lord I'm going home to you."
       }
     },
     {
       "variant_v3": {
         "wav": "/audio/experiment_2_song_2_variant_v3_v3.wav",
-        "lyrics": "Sweet home Alabama, where the heavens are blue. Sweet home Alabama, God I'm coming home to you."
+        "content": "Sweet home Alabama, where the heavens are blue. Sweet home Alabama, God I'm coming home to you."
       }
     },
     {
       "variant_v4": {
         "wav": "/audio/experiment_2_song_2_variant_v4_v4.wav",
-        "lyrics": "Sweet home Alabama, with skies so blue. Sweet home Alabama, I'm returning home to you."
+        "content": "Sweet home Alabama, with skies so blue. Sweet home Alabama, I'm returning home to you."
       }
     }
   ],
@@ -61,19 +61,19 @@
     {
       "melody_GT": {
         "wav": "/audio/experiment_2_song_3_melody_GT_original.mp3",
-        "lyrics": "Bohemian Rhapsody, caught in a landslide, no escape from reality. Open your eyes, look up to the skies and see."
+        "content": "Bohemian Rhapsody, caught in a landslide, no escape from reality. Open your eyes, look up to the skies and see."
       }
     },
     {
       "variant_v1": {
         "wav": "/audio/experiment_2_song_3_variant_v1_v1.wav",
-        "lyrics": "Bohemian Rhapsody, caught in a landslide, no escape from reality. Open your eyes, look up to the skies and see."
+        "content": "Bohemian Rhapsody, caught in a landslide, no escape from reality. Open your eyes, look up to the skies and see."
       }
     },
     {
       "variant_v2": {
         "wav": "/audio/experiment_2_song_3_variant_v2_v2.wav",
-        "lyrics": "Bohemian Rhapsody, stuck in a landslide, cannot escape reality. Open your eyes, look up at the skies and see."
+        "content": "Bohemian Rhapsody, stuck in a landslide, cannot escape reality. Open your eyes, look up at the skies and see."
       }
     }
   ]

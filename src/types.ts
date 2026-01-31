@@ -1,6 +1,6 @@
 export interface AudioData {
   wav: string;
-  lyrics: string;
+  content: string;
 }
 
 export interface AudioItem {
@@ -13,6 +13,6 @@ export function isAudioData(value: unknown): value is AudioData {
     typeof value === 'object' &&
     value !== null &&
     'wav' in value &&
-    'lyrics' in value
+    'content' in value
   );
 }

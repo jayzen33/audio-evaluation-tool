@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { computeDiff } from '../utils/diff';
 import type { DiffPart } from '../utils/diff';
 
-interface LyricsDisplayProps {
+interface ContentDisplayProps {
   text: string;
   originalText?: string;
   className?: string;
   isGt?: boolean;
 }
 
-export const LyricsDisplay: React.FC<LyricsDisplayProps> = ({ text, originalText, className, isGt }) => {
+export const ContentDisplay: React.FC<ContentDisplayProps> = ({ text, originalText, className, isGt }) => {
   const [parts, setParts] = useState<DiffPart[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export const LyricsDisplay: React.FC<LyricsDisplayProps> = ({ text, originalText
   useEffect(() => {
     let active = true;
 
-    const loadLyrics = async () => {
+    const loadContent = async () => {
       setLoading(true);
       setError(null);
       try {
@@ -32,7 +32,7 @@ export const LyricsDisplay: React.FC<LyricsDisplayProps> = ({ text, originalText
         }
       } catch (err) {
         if (active) {
-          setError('Error loading lyrics');
+          setError('Error loading content');
           console.error(err);
         }
       } finally {
@@ -40,14 +40,14 @@ export const LyricsDisplay: React.FC<LyricsDisplayProps> = ({ text, originalText
       }
     };
 
-    loadLyrics();
+    loadContent();
 
     return () => {
       active = false;
     };
   }, [text, originalText]);
 
-  if (loading) return <div className="text-slate-400 text-sm animate-pulse">Loading lyrics...</div>;
+  if (loading) return <div className="text-slate-400 text-sm animate-pulse">Loading content...</div>;
   if (error) return <div className="text-red-400 text-sm">{error}</div>;
 
   return (

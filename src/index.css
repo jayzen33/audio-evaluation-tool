@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar for lyrics */
+/* Custom scrollbar for content display */
 .overflow-y-auto::-webkit-scrollbar {
   width: 4px;
 }

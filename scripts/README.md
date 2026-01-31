@@ -63,13 +63,13 @@ The input JSON should have this structure:
     {
       "melody_GT": {
         "wav": "/absolute/path/to/gt.mp3",
-        "lyrics": "Original lyrics"
+        "content": "Original transcript"
       }
     },
     {
       "variant_1": {
         "wav": "/absolute/path/to/variant1.wav",
-        "lyrics": "Variant lyrics"
+        "content": "Variant transcript"
       }
     }
   ]

@@ -183,7 +183,7 @@ function processJsonData(jsonData, folderName) {
           continue;
         }
 
-        const { wav, lyrics } = audioData;
+        const { wav, content } = audioData;
         
         if (!wav || typeof wav !== 'string') {
           processedVariant[variantKey] = audioData;
@@ -216,7 +216,7 @@ function processJsonData(jsonData, folderName) {
         // Update the path in the processed data
         processedVariant[variantKey] = {
           wav: publicRelativePath,
-          lyrics: lyrics || ''
+          content: content || ''
         };
       }
 
