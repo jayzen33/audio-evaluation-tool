@@ -19,11 +19,21 @@ git clone <repository-url>
 cd audio-evaluation-tools
 npm install
 
-# Start dev server
+# Start dev server (default: http://localhost:5173)
 npm run dev
 ```
 
-Open `http://localhost:30767`
+## Custom Port
+
+Set the `VITE_PORT` environment variable to use a custom port:
+
+```bash
+# Linux/macOS
+VITE_PORT=8080 npm run dev
+
+# Windows
+set VITE_PORT=8080 && npm run dev
+```
 
 ## Usage
 
@@ -57,10 +67,10 @@ npm run copy-audio -- /path/to/data.json -f exp1
 | MOS | `/mos/:exp` | Rate quality 1-5 |
 
 Examples:
-- `http://localhost:30767/` - Home page
-- `http://localhost:30767/compare/exp1` - Comparison tool
-- `http://localhost:30767/abtest/exp1` - AB test
-- `http://localhost:30767/mos/exp1` - MOS scoring
+- `http://localhost:5173/` - Home page
+- `http://localhost:5173/compare/exp1` - Comparison tool
+- `http://localhost:5173/abtest/exp1` - AB test
+- `http://localhost:5173/mos/exp1` - MOS scoring
 
 ## Development
 

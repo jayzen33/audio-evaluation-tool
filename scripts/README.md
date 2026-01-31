@@ -20,7 +20,7 @@ node scripts/copy-audio-files.cjs <input-json-path> [options]
 
 ### Basic Usage
 
-Copy to default folder (accessible at `http://localhost:30767/`):
+Copy to default folder (accessible at `http://localhost:5173/`)
 
 ```bash
 npm run copy-audio -- /path/to/data.json
@@ -28,7 +28,7 @@ npm run copy-audio -- /path/to/data.json
 
 ### Specify Experiment Folder
 
-Copy to `exp1` folder (accessible at `http://localhost:30767/exp1`):
+Copy to `exp1` folder (accessible at `http://localhost:5173/exp1`)
 
 ```bash
 npm run copy-audio -- /path/to/data.json -f exp1

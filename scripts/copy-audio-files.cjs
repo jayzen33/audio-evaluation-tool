@@ -12,14 +12,14 @@
  * 
  * Options:
  *   -f, --folder <name>   Output folder name under public/datas3/ (default: 'default')
- *                        This becomes the URL path: http://localhost:30767/<folder-name>
+ *                        This becomes the URL path: http://localhost:5173/<folder-name>
  *   -o, --output <name>   Output JSON filename (default: 'data.json')
  * 
  * Examples:
- *   # Copy to default folder (accessible at http://localhost:30767/)
+ *   # Copy to default folder (accessible at http://localhost:5173/)
  *   node scripts/copy-audio-files.cjs /path/to/data.json
  * 
- *   # Copy to exp1 folder (accessible at http://localhost:30767/exp1)
+ *   # Copy to exp1 folder (accessible at http://localhost:5173/exp1)
  *   node scripts/copy-audio-files.cjs /path/to/data.json -f exp1
  * 
  *   # Copy to model-v2 folder with custom output name
@@ -92,16 +92,16 @@ Usage:
   node scripts/copy-audio-files.cjs <input-json-path> [options]
 
 Options:
-  -f, --folder <name>   Output folder name under public/datas3/ (default: 'default')
-                        This becomes the URL path: http://localhost:30767/<folder-name>
+  -f, --folder <name>   Output folder name under public/data/ (default: 'default')
+                        This becomes the URL path: http://localhost:5173/<folder-name>
   -o, --output <name>   Output JSON filename (default: 'data.json')
   -h, --help            Show this help message
 
 Examples:
-  # Copy to default folder (accessible at http://localhost:30767/)
+  # Copy to default folder (accessible at http://localhost:5173/)
   node scripts/copy-audio-files.cjs /path/to/data.json
 
-  # Copy to exp1 folder (accessible at http://localhost:30767/exp1)
+  # Copy to exp1 folder (accessible at http://localhost:5173/exp1)
   node scripts/copy-audio-files.cjs /path/to/data.json -f exp1
 
   # Copy to model-v2 folder with custom output name
@@ -245,7 +245,8 @@ function main() {
   console.log(`Output JSON: ${outputPath}`);
   console.log(`Audio Dir:   ${AUDIO_DIR}`);
   console.log('----------------------------------------');
-  console.log(`Access URL:  http://localhost:30767/${folderName === 'default' ? '' : folderName}`);
+  const port = process.env.VITE_PORT || '5173';
+  console.log(`Access URL:  http://localhost:${port}/${folderName === 'default' ? '' : folderName}`);
   if (folderName === 'default') {
     console.log(`Data URL:    /data/default/data.json`);
   } else {
@@ -308,7 +309,7 @@ function main() {
   console.log('========================================');
   console.log(`1. Add audio files (optional)`);
   console.log(`2. Start dev server: npm run dev`);
-  console.log(`3. Open browser: http://localhost:30767/${folderName === 'default' ? '' : folderName}`);
+  console.log(`3. Open browser: http://localhost:${port}/${folderName === 'default' ? '' : folderName}`);
   console.log('\n✨ Done!');
 }
 
