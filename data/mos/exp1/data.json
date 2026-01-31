@@ -1,0 +1,48 @@
+{
+  "quality_eval_01": [
+    {
+      "melody_GT": {
+        "wav": "/audio/test_song_alpha_melody_GT_gt.mp3",
+        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+      }
+    },
+    {
+      "vits": {
+        "wav": "/audio/test_song_alpha_baseline_b1.wav",
+        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+      }
+    },
+    {
+      "tacotron2": {
+        "wav": "/audio/test_song_alpha_model_a_m1.wav",
+        "content": "Let it be, let it be, let it be, let it be. Whisper some wisdom, let it be."
+      }
+    },
+    {
+      "fastspeech2": {
+        "wav": "/audio/test_song_alpha_model_b_m2.wav",
+        "content": "Let it be, let it be, let it be, oh let it be. Whisper words of wisdom, let it be."
+      }
+    }
+  ],
+  "quality_eval_02": [
+    {
+      "melody_GT": {
+        "wav": "/audio/test_song_beta_melody_GT_gt.mp3",
+        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
+      }
+    },
+    {
+      "vits": {
+        "wav": "/audio/test_song_beta_baseline_b1.wav",
+        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
+      }
+    },
+    {
+      "tacotron2": {
+        "wav": "/audio/test_song_beta_model_a_m1.wav",
+        "content": "Hey Jude, don't make it bad. Take a sad tune and make it better."
+      }
+    }
+  ]
+}
