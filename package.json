@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A web-based tool for comparing audio model outputs side-by-side",
   "author": "",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://jayzen33.github.io/audio-evaluation-tool/",
   "repository": {
     "type": "git",
     "url": ""
@@ -23,6 +24,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:gh-pages": "GH_PAGES=true npm run build",
+    "deploy": "npm run build:gh-pages && gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview",
     "copy-audio": "node scripts/copy-audio-files.cjs"

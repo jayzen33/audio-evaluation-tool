@@ -6,6 +6,23 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Audio Evaluation Tools</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages - Redirect handler
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      
+      (function() {
+        var redirect = new URLSearchParams(window.location.search).get('redirect');
+        if (redirect) {
+          // Remove the redirect parameter and update the URL
+          var url = window.location.origin + 
+                    window.location.pathname.replace(/\/?$/, '/') + 
+                    redirect + 
+                    window.location.hash;
+          window.history.replaceState(null, null, url);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

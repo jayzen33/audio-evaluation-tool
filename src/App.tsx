@@ -20,9 +20,11 @@ function MOSPageWrapper() {
   return <MOSPage expName={expName || 'default'} />;
 }
 
+const basename = import.meta.env.BASE_URL || '/';
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         {/* Home page */}
         <Route path="/" element={<HomePage />} />
