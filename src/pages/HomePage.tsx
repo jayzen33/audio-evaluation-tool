@@ -14,7 +14,7 @@ export default function HomePage() {
             Audio Evaluation Tools
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            A powerful web-based tool for comparing audio model outputs side-by-side with lyrics diff and quality evaluation.
+            A web-based tool for comparing audio model outputs side-by-side with content diff and quality evaluation.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export default function HomePage() {
               </div>
             </div>
             <p className="text-slate-600 mb-6 flex-grow">
-              Compare multiple audio variants side-by-side. Tag each variant as good, maybe, or bad with detailed lyrics diff.
+              Compare multiple audio variants side-by-side. Tag each variant as good, maybe, or bad with detailed content diff.
             </p>
             <div className="flex items-center text-indigo-600 font-medium mt-auto">
               Get Started
