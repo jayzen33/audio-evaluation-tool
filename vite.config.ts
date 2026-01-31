@@ -10,12 +10,14 @@ export default defineConfig({
       name: 'spa-fallback',
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
-          // Handle routes like /exp1, /exp2, /exp-name, etc.
-          // Skip API paths, file paths, and root
+          // Handle routes like /compare/exp1, /abtest/exp1, /exp1, etc.
+          // Skip API paths, file paths, vite HMR paths, and root
           if (req.url && 
               !req.url.startsWith('/api') && 
               !req.url.startsWith('/assets') && 
               !req.url.startsWith('/@') &&
+              !req.url.startsWith('/src/') &&
+              !req.url.startsWith('/node_modules/') &&
               !req.url.includes('.') &&
               req.url !== '/') {
             // Rewrite to root to serve index.html
