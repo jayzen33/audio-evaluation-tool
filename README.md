@@ -15,6 +15,8 @@ A web-based toolkit for audio quality evaluation, supporting comparison tagging,
 
 Try the live demo: https://jayzen33.github.io/audio-evaluation-tool/
 
+> Note: The demo is for preview purposes only. For actual use, please deploy locally or on your own server.
+
 ## Installation
 
 ```bash
@@ -76,76 +78,11 @@ Examples:
 - `http://localhost:5173/abtest/exp1` - AB test
 - `http://localhost:5173/mos/exp1` - MOS scoring
 
-## Deploy to GitHub Pages
-
-### Option 1: Manual Deploy
-
-```bash
-# Build for GitHub Pages
-npm run build:gh-pages
-
-# Deploy dist folder to gh-pages branch
-npx gh-pages -d dist
-```
-
-### Option 2: GitHub Actions (Recommended)
-
-Create `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build:gh-pages
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-      - uses: actions/deploy-pages@v4
-        id: deployment
-```
-
-### Configuration
-
-1. Go to **Settings → Pages** in your GitHub repository
-2. Set **Source** to "GitHub Actions"
-3. Update `homepage` in `package.json` if using a different repo name:
-   ```json
-   "homepage": "https://<username>.github.io/<repo-name>/"
-   ```
-
 ## Development
 
 ```bash
 npm run dev      # Start dev server
 npm run build    # Build for production
-npm run build:gh-pages  # Build for GitHub Pages
 npm run lint     # Run linter
 ```
 
