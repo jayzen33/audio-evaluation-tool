@@ -271,7 +271,8 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
       setLoading(true);
       setError(null);
       
-      const dataUrl = `/data/abtest/${expName}/data.json`;
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const dataUrl = `${baseUrl}data/abtest/${expName}/data.json`;
       
       fetch(dataUrl)
         .then(res => {

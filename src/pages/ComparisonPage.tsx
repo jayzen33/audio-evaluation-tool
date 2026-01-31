@@ -122,9 +122,10 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
       // Construct data URL based on experiment name
       // e.g., /exp1 -> /data/exp1/data.json
       // e.g., / -> /data/default/data.json
+      const baseUrl = import.meta.env.BASE_URL || '/';
       const dataUrl = expName === 'default' 
-        ? '/data/default/data.json' 
-        : `/data/${expName}/data.json`;
+        ? `${baseUrl}data/default/data.json` 
+        : `${baseUrl}data/${expName}/data.json`;
       
       fetch(dataUrl)
         .then(res => {

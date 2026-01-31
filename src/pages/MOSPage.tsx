@@ -288,7 +288,8 @@ export default function MOSPage({ expName }: MOSPageProps) {
       setLoading(true);
       setError(null);
       
-      const dataUrl = `/data/mos/${expName}/data.json`;
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const dataUrl = `${baseUrl}data/mos/${expName}/data.json`;
       
       fetch(dataUrl)
         .then(res => {
