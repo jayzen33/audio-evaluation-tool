@@ -1,10 +1,25 @@
 import { Logo } from '../components/Logo';
 import { Link } from 'react-router-dom';
+import { UserSelector } from '../components/UserSelector';
+import { useUser } from '../hooks/useUser';
 
 export default function HomePage() {
+  const { currentUser } = useUser();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
-      <div className="max-w-6xl w-full">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header with User Selector */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Logo size={36} className="shadow-lg shadow-indigo-200 rounded-xl" />
+            <h1 className="text-xl font-bold text-slate-700">Audio Evaluation Tools</h1>
+          </div>
+          <UserSelector />
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 py-12">
         {/* Header Section */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
@@ -16,6 +31,11 @@ export default function HomePage() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             A web-based tool for comparing audio model outputs side-by-side with content diff and quality evaluation.
           </p>
+          {currentUser && (
+            <p className="mt-4 text-sm text-indigo-600 font-medium">
+              Welcome back, {currentUser.name}!
+            </p>
+          )}
         </div>
 
         {/* Tool Cards Grid */}
@@ -169,7 +189,7 @@ export default function HomePage() {
             <code className="bg-slate-200 px-3 py-1.5 rounded text-slate-700">/mos/:expName</code>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

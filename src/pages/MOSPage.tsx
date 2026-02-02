@@ -1,12 +1,12 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
 import { AudioPlayer } from '../components/AudioPlayer';
 import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
-
-// Scores storage key for localStorage
-const getScoresStorageKey = (expName: string) => `audio_mos_scores_${expName}`;
+import { UserSelector } from '../components/UserSelector';
+import { useUser } from '../hooks/useUser';
+import { getMOSSStorageKey, loadProgress, saveProgressHybrid } from '../utils/storage';
 
 // MOS Score type (1-5 scale)
 type MOSScore = 1 | 2 | 3 | 4 | 5 | null;
@@ -190,33 +190,55 @@ export default function MOSPage({ expName }: MOSPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [scores, setScores] = useState<ScoresState>({});
-
-  // Load scores from localStorage when expName changes
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { currentUser } = useUser();
+  
+  // Use refs to track current context for saves
+  const currentExpRef = useRef(expName);
+  const currentUserRef = useRef(currentUser?.id || null);
+  const hasLoadedOnce = useRef(false);
+  
+  // Update refs when context changes
   useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
+    currentExpRef.current = expName;
+    currentUserRef.current = currentUser?.id || null;
+  }, [expName, currentUser?.id]);
+
+  // Load scores from backend/localStorage when expName or currentUser changes
+  useEffect(() => {
+    setIsInitialized(false);
+    hasLoadedOnce.current = false;
+    const frameId = requestAnimationFrame(async () => {
       try {
-        const savedScores = localStorage.getItem(getScoresStorageKey(expName));
-        if (savedScores) {
-          setScores(JSON.parse(savedScores));
-        } else {
-          setScores({});
-        }
+        const storageKey = getMOSSStorageKey(expName, currentUser?.id || null);
+        const savedScores = await loadProgress<ScoresState>('mos', expName, currentUser?.id || null, storageKey);
+        setScores(savedScores || {});
+        hasLoadedOnce.current = true;
       } catch (err) {
-        console.error('Failed to load from localStorage:', err);
+        console.error('Failed to load scores:', err);
         setScores({});
+        hasLoadedOnce.current = true;
+      } finally {
+        setIsInitialized(true);
       }
     });
     return () => cancelAnimationFrame(frameId);
-  }, [expName]);
+  }, [expName, currentUser?.id]);
 
-  // Save scores to localStorage whenever they change
+  // Save scores to backend/localStorage whenever they change (but not during initial load)
   useEffect(() => {
-    try {
-      localStorage.setItem(getScoresStorageKey(expName), JSON.stringify(scores));
-    } catch (err) {
-      console.error('Failed to save scores to localStorage:', err);
-    }
-  }, [scores, expName]);
+    if (!isInitialized || !hasLoadedOnce.current) return;
+    
+    const saveData = async () => {
+      try {
+        const storageKey = getMOSSStorageKey(currentExpRef.current, currentUserRef.current);
+        await saveProgressHybrid('mos', currentExpRef.current, currentUserRef.current, storageKey, scores);
+      } catch (err) {
+        console.error('Failed to save scores:', err);
+      }
+    };
+    saveData();
+  }, [scores, isInitialized]);
 
   // Handle score change
   const handleScoreChange = useCallback((scoreKey: string, score: MOSScore) => {
@@ -255,6 +277,7 @@ export default function MOSPage({ expName }: MOSPageProps) {
   const handleExport = useCallback(() => {
     const exportData = {
       experiment: expName,
+      user: currentUser?.id || 'anonymous',
       testType: 'mos',
       exportedAt: new Date().toISOString(),
       scores: scores,
@@ -273,7 +296,7 @@ export default function MOSPage({ expName }: MOSPageProps) {
     a.download = `mos_${expName}_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [scores, expName, stats]);
+  }, [scores, expName, stats, currentUser?.id]);
 
   // Clear all scores
   const handleClear = useCallback(() => {
@@ -351,6 +374,14 @@ export default function MOSPage({ expName }: MOSPageProps) {
             </span>
           </div>
           
+          {/* User Selector */}
+          <UserSelector />
+        </div>
+      </header>
+
+      {/* Secondary header for Stats & Actions */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-[1800px] mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-3">
           {/* Stats & Actions */}
           <div className="flex items-center gap-4 flex-wrap">
             {/* Progress */}
@@ -394,7 +425,7 @@ export default function MOSPage({ expName }: MOSPageProps) {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* MOS Scale Reference */}
       <div className="bg-white border-b border-slate-200">

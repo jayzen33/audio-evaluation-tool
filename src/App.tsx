@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { UserProvider } from './contexts/UserContext';
 import ComparisonPage from './pages/ComparisonPage';
 import ABTestPage from './pages/ABTestPage';
 import MOSPage from './pages/MOSPage';
@@ -24,8 +25,9 @@ const basename = import.meta.env.BASE_URL || '/';
 
 function App() {
   return (
-    <BrowserRouter basename={basename}>
-      <Routes>
+    <UserProvider>
+      <BrowserRouter basename={basename}>
+        <Routes>
         {/* Home page */}
         <Route path="/" element={<HomePage />} />
         
@@ -44,7 +46,8 @@ function App() {
         {/* Legacy routes for backward compatibility (redirect old /exp1 style URLs) */}
         <Route path="/:expName" element={<LegacyRedirectWrapper />} />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 

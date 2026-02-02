@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { AudioComparisonRow } from '../components/AudioComparisonRow';
 import type { TagValue } from '../components/TagButton';
 import { Logo } from '../components/Logo';
-
-// Tag storage key for localStorage (includes experiment name for isolation)
-const getTagsStorageKey = (expName: string) => `audio_comparison_tags_${expName}`;
+import { UserSelector } from '../components/UserSelector';
+import { useUser } from '../hooks/useUser';
+import { getComparisonStorageKey, loadProgress, saveProgressHybrid } from '../utils/storage';
 
 // Tags type: { [uuid]: { [variantKey]: TagValue } }
 export type TagsState = Record<string, Record<string, TagValue>>;
@@ -19,34 +19,55 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tags, setTags] = useState<TagsState>({});
-
-  // Load tags from localStorage when expName changes
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { currentUser } = useUser();
+  
+  // Use refs to track current context for saves
+  const currentExpRef = useRef(expName);
+  const currentUserRef = useRef(currentUser?.id || null);
+  const hasLoadedOnce = useRef(false);
+  
+  // Update refs when context changes
   useEffect(() => {
-    // Use requestAnimationFrame to avoid cascading renders warning
-    const frameId = requestAnimationFrame(() => {
+    currentExpRef.current = expName;
+    currentUserRef.current = currentUser?.id || null;
+  }, [expName, currentUser?.id]);
+
+  // Load tags from backend/localStorage when expName or currentUser changes
+  useEffect(() => {
+    setIsInitialized(false);
+    hasLoadedOnce.current = false;
+    const frameId = requestAnimationFrame(async () => {
       try {
-        const savedTags = localStorage.getItem(getTagsStorageKey(expName));
-        if (savedTags) {
-          setTags(JSON.parse(savedTags));
-        } else {
-          setTags({});
-        }
+        const storageKey = getComparisonStorageKey(expName, currentUser?.id || null);
+        const savedTags = await loadProgress<TagsState>('comparison', expName, currentUser?.id || null, storageKey);
+        setTags(savedTags || {});
+        hasLoadedOnce.current = true;
       } catch (err) {
-        console.error('Failed to load tags from localStorage:', err);
+        console.error('Failed to load tags:', err);
         setTags({});
+        hasLoadedOnce.current = true;
+      } finally {
+        setIsInitialized(true);
       }
     });
     return () => cancelAnimationFrame(frameId);
-  }, [expName]);
+  }, [expName, currentUser?.id]);
 
-  // Save tags to localStorage whenever they change
+  // Save tags to backend/localStorage whenever they change (but not during initial load)
   useEffect(() => {
-    try {
-      localStorage.setItem(getTagsStorageKey(expName), JSON.stringify(tags));
-    } catch (err) {
-      console.error('Failed to save tags to localStorage:', err);
-    }
-  }, [tags, expName]);
+    if (!isInitialized || !hasLoadedOnce.current) return;
+    
+    const saveData = async () => {
+      try {
+        const storageKey = getComparisonStorageKey(currentExpRef.current, currentUserRef.current);
+        await saveProgressHybrid('comparison', currentExpRef.current, currentUserRef.current, storageKey, tags);
+      } catch (err) {
+        console.error('Failed to save tags:', err);
+      }
+    };
+    saveData();
+  }, [tags, isInitialized]);
 
   // Handle tag change
   const handleTagChange = useCallback((uuid: string, variantKey: string, value: TagValue) => {
@@ -91,6 +112,7 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
   const handleExportTags = useCallback(() => {
     const exportData = {
       experiment: expName,
+      user: currentUser?.id || 'anonymous',
       exportedAt: new Date().toISOString(),
       tags: tags,
       summary: tagStats
@@ -103,7 +125,7 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
     a.download = `audio_tags_${expName}_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [tags, expName, tagStats]);
+  }, [tags, expName, tagStats, currentUser?.id]);
 
   // Clear all tags
   const handleClearTags = useCallback(() => {
@@ -190,6 +212,14 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
             </span>
           </div>
           
+          {/* User Selector */}
+          <UserSelector />
+        </div>
+      </header>
+
+      {/* Secondary header for Tag Stats & Actions */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-[1800px] mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-3">
           {/* Tag Stats & Actions */}
           <div className="flex items-center gap-4">
             {/* Tag Statistics */}
@@ -246,7 +276,7 @@ export default function ComparisonPage({ expName }: ComparisonPageProps) {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-[1800px] mx-auto px-6 py-8">
         <div className="space-y-6">

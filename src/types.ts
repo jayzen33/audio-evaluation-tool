@@ -16,3 +16,21 @@ export function isAudioData(value: unknown): value is AudioData {
     'content' in value
   );
 }
+
+// User types for multi-user support
+export interface User {
+  id: string;           // unique identifier (user input)
+  name: string;         // display name
+  createdAt: string;    // ISO timestamp
+}
+
+export interface UserStorage {
+  users: User[];
+  currentUserId: string | null;
+}
+
+// User-scoped storage key generator
+export function getUserScopedKey(baseKey: string, userId: string | null): string {
+  const effectiveUserId = userId || 'anonymous';
+  return `${baseKey}_${effectiveUserId}`;
+}

@@ -1,12 +1,12 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
 import { AudioPlayer } from '../components/AudioPlayer';
 import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
-
-// Selection storage key for localStorage
-const getSelectionStorageKey = (expName: string) => `audio_abtest_selection_${expName}`;
+import { UserSelector } from '../components/UserSelector';
+import { useUser } from '../hooks/useUser';
+import { getABTestStorageKey, getABTestBlindModeKey, loadProgress, saveProgressHybrid } from '../utils/storage';
 
 // Selection type: { [uuid]: selectedVariantKey }
 type SelectionState = Record<string, string | null>;
@@ -180,43 +180,68 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [selections, setSelections] = useState<SelectionState>({});
   const [blindMode, setBlindMode] = useState(true); // Default to blind mode for unbiased testing
-
-  // Load selections from localStorage when expName changes
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { currentUser } = useUser();
+  
+  // Use refs to track current context for saves
+  const currentExpRef = useRef(expName);
+  const currentUserRef = useRef(currentUser?.id || null);
+  const hasLoadedOnce = useRef(false);
+  
+  // Update refs when context changes
   useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
+    currentExpRef.current = expName;
+    currentUserRef.current = currentUser?.id || null;
+  }, [expName, currentUser?.id]);
+
+  // Load selections from backend/localStorage when expName or currentUser changes
+  useEffect(() => {
+    setIsInitialized(false);
+    hasLoadedOnce.current = false;
+    const frameId = requestAnimationFrame(async () => {
       try {
-        const savedSelections = localStorage.getItem(getSelectionStorageKey(expName));
-        if (savedSelections) {
-          setSelections(JSON.parse(savedSelections));
-        } else {
-          setSelections({});
-        }
-        // Load blind mode preference
-        const blindModePref = localStorage.getItem(`abtest_blind_mode_${expName}`);
+        const storageKey = getABTestStorageKey(expName, currentUser?.id || null);
+        const savedSelections = await loadProgress<SelectionState>('abtest', expName, currentUser?.id || null, storageKey);
+        setSelections(savedSelections || {});
+        
+        // Load blind mode preference (local only)
+        const blindModeKey = getABTestBlindModeKey(expName, currentUser?.id || null);
+        const blindModePref = localStorage.getItem(blindModeKey);
         if (blindModePref !== null) {
           setBlindMode(JSON.parse(blindModePref));
         }
+        hasLoadedOnce.current = true;
       } catch (err) {
-        console.error('Failed to load from localStorage:', err);
+        console.error('Failed to load selections:', err);
         setSelections({});
+        hasLoadedOnce.current = true;
+      } finally {
+        setIsInitialized(true);
       }
     });
     return () => cancelAnimationFrame(frameId);
-  }, [expName]);
+  }, [expName, currentUser?.id]);
 
-  // Save selections to localStorage whenever they change
+  // Save selections to backend/localStorage whenever they change (but not during initial load)
   useEffect(() => {
-    try {
-      localStorage.setItem(getSelectionStorageKey(expName), JSON.stringify(selections));
-    } catch (err) {
-      console.error('Failed to save selections to localStorage:', err);
-    }
-  }, [selections, expName]);
+    if (!isInitialized || !hasLoadedOnce.current) return;
+    
+    const saveData = async () => {
+      try {
+        const storageKey = getABTestStorageKey(currentExpRef.current, currentUserRef.current);
+        await saveProgressHybrid('abtest', currentExpRef.current, currentUserRef.current, storageKey, selections);
+      } catch (err) {
+        console.error('Failed to save selections:', err);
+      }
+    };
+    saveData();
+  }, [selections, isInitialized]);
 
   // Save blind mode preference
   useEffect(() => {
-    localStorage.setItem(`abtest_blind_mode_${expName}`, JSON.stringify(blindMode));
-  }, [blindMode, expName]);
+    const blindModeKey = getABTestBlindModeKey(expName, currentUser?.id || null);
+    localStorage.setItem(blindModeKey, JSON.stringify(blindMode));
+  }, [blindMode, expName, currentUser?.id]);
 
   // Handle selection
   const handleSelect = useCallback((uuid: string, variantKey: string) => {
@@ -238,6 +263,7 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
   const handleExport = useCallback(() => {
     const exportData = {
       experiment: expName,
+      user: currentUser?.id || 'anonymous',
       testType: 'abtest',
       exportedAt: new Date().toISOString(),
       blindMode,
@@ -256,7 +282,7 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
     a.download = `abtest_${expName}_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [selections, expName, blindMode, stats]);
+  }, [selections, expName, blindMode, stats, currentUser?.id]);
 
   // Clear all selections
   const handleClear = useCallback(() => {
@@ -334,6 +360,14 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
             </span>
           </div>
           
+          {/* User Selector */}
+          <UserSelector />
+        </div>
+      </header>
+
+      {/* Secondary header for Stats & Actions */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-[1800px] mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-3">
           {/* Stats & Actions */}
           <div className="flex items-center gap-4 flex-wrap">
             {/* Progress */}
@@ -397,7 +431,7 @@ export default function ABTestPage({ expName }: ABTestPageProps) {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-[1800px] mx-auto px-6 py-8">
         <div className="space-y-6">
