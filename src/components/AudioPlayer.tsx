@@ -25,6 +25,9 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const isPlayingRef = useRef(false);
 
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  const audioSrc = src.startsWith('/') ? `${baseUrl}${src.slice(1)}` : src;
+
   const initWavesurfer = useCallback(() => {
     if (!containerRef.current) return;
 
@@ -45,7 +48,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({
       backend: 'WebAudio',
     });
 
-    wavesurfer.load(src);
+    wavesurfer.load(audioSrc);
 
     wavesurfer.on('play', () => {
       isPlayingRef.current = true;
@@ -60,7 +63,7 @@ export const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(({
     });
 
     wavesurferRef.current = wavesurfer;
-  }, [src, isGt, height]);
+  }, [audioSrc, isGt, height]);
 
   useEffect(() => {
     initWavesurfer();
