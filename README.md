@@ -19,11 +19,13 @@ A lightweight web toolkit for audio quality evaluation, supporting subjective co
    npm install
    ```
 
-2. **Start the frontend:**
+2. **Start the application:**
    ```bash
-   npm run dev
-   # Runs at http://localhost:5173
+   ./start.sh
    ```
+
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:5000
 
 ## Usage
 
@@ -52,19 +54,6 @@ npm run copy-audio -- /path/to/data.json -f exp1
 | **MOS** | `/mos/:exp` | Rate quality on 1-5 scale |
 
 *Replace `:exp` with your experiment name (e.g., `exp1` based on the `-f` flag used in import).*
-
-## Backend (Optional)
-
-To enable cross-device sync and multi-user progress tracking, run the Python backend.
-
-```bash
-cd backend
-pip install -r requirements.txt
-
-# Start backend server
-./run.sh   # Linux/macOS
-# run.bat  # Windows
-```
 
 ## License
 
