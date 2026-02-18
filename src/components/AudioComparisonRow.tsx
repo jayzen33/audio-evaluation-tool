@@ -74,7 +74,7 @@ export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, in
               <div 
                 key={key} 
                 onClick={() => handleCardClick(key)}
-                className={`rounded-xl p-4 transition-all duration-200 relative group ${
+                className={`rounded-xl p-4 transition-all duration-200 relative ${
                   isGt 
                     ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 shadow-sm' 
                     : currentTag 
@@ -86,15 +86,6 @@ export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, in
                       : 'bg-slate-50 border border-slate-100 hover:border-slate-200 hover:bg-slate-100/50'
                 }`}
               >
-                {/* Hover play hint */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded-xl bg-black/5">
-                  <div className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-slate-700 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                </div>
-
                 {/* Variant Label & Tag Button */}
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">

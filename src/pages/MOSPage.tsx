@@ -144,22 +144,13 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
             return (
               <div 
                 key={key}
-                className={`relative rounded-xl p-4 transition-all duration-200 group ${
+                className={`rounded-xl p-4 transition-all duration-200 ${
                   isGt 
                     ? 'bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200' 
                     : 'bg-slate-50 border border-slate-200'
                 }`}
                 onClick={() => handleCardClick(audioKey)}
               >
-                {/* Hover play hint */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded-xl bg-black/5">
-                  <div className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-slate-700 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                </div>
-
                 {/* Label */}
                 <div className="flex items-center gap-2 mb-3">
                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${
