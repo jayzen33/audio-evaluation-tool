@@ -27,6 +27,23 @@ const mosLabels: Record<number, { label: string; description: string; color: str
   1: { label: 'Bad', description: 'Bad quality, very annoying distortion', color: 'bg-rose-500' },
 };
 
+// Generate a stable random ID from key (deterministic based on key)
+const generateStableId = (key: string): string => {
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    const char = key.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = '';
+  const absHash = Math.abs(hash);
+  for (let i = 0; i < 6; i++) {
+    id += chars.charAt((absHash >> i) % chars.length);
+  }
+  return `ID-${id}`;
+};
+
 // MOS Rating row component
 interface MOSRowProps {
   item: AudioItem;
@@ -38,6 +55,15 @@ interface MOSRowProps {
 function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
   const { uuid, ...variants } = item;
 
+  // Generate stable random IDs for all variant keys
+  const randomIds = useMemo(() => {
+    const ids: Record<string, string> = {};
+    Object.keys(variants).forEach(key => {
+      ids[key] = generateStableId(key);
+    });
+    return ids;
+  }, [variants]);
+
   const gtData = variants['melody_GT'];
   const gtContentText = isAudioData(gtData) 
     ? gtData.content
@@ -46,12 +72,17 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
   // Get all variant keys (including ground truth if present)
   const variantKeys = Object.keys(variants);
   
-  // Sort to show GT first, then alphabetically
-  const sortedKeys = [...variantKeys].sort((a, b) => {
-    if (a === 'melody_GT') return -1;
-    if (b === 'melody_GT') return 1;
-    return a.localeCompare(b);
-  });
+  // Generate stable random order for variants (GT first)
+  const sortedKeys = useMemo(() => {
+    const nonGtKeys = variantKeys.filter(k => k !== 'melody_GT');
+    // Use hash-based shuffle for stable random order
+    const shuffled = [...nonGtKeys].sort((a, b) => {
+      const hashA = generateStableId(a).charCodeAt(3);
+      const hashB = generateStableId(b).charCodeAt(3);
+      return hashA - hashB;
+    });
+    return ['melody_GT', ...shuffled].filter(k => variantKeys.includes(k));
+  }, [variantKeys]);
 
   // Calculate completion for this item
   const scoredCount = sortedKeys.filter(key => {
@@ -132,7 +163,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     )}
-                    {isGt ? 'Ground Truth' : key}
+                    {isGt ? 'Ground Truth' : randomIds[key]}
                   </span>
                   {currentScore !== null && !isGt && (
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white ${mosLabels[currentScore].color}`}>
