@@ -15,14 +15,14 @@ interface AudioComparisonRowProps {
 export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, index, tags, onTagChange }) => {
   const { uuid, ...variants } = item;
 
-  const gtData = variants['melody_GT'];
+  const gtData = variants['GT'];
   const gtContentText = isAudioData(gtData) 
     ? gtData.content
     : undefined;
 
   const sortedKeys = Object.keys(variants).sort((a, b) => {
-    if (a === 'melody_GT') return -1;
-    if (b === 'melody_GT') return 1;
+    if (a === 'GT') return -1;
+    if (b === 'GT') return 1;
     return a.localeCompare(b);
   });
 
@@ -58,7 +58,7 @@ export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, in
 
             const audioSrc = data.wav;
             const contentText = data.content;
-            const isGt = key === 'melody_GT';
+            const isGt = key === 'GT';
             const currentTag = tags[key] || null;
 
             return (

@@ -1,7 +1,7 @@
 {
   "demo_song_001": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/demo_song_001_melody_GT_original.mp3",
         "content": "Yesterday, all my troubles seemed so far away. Now it looks as though they're here to stay. Oh, I believe in yesterday. Suddenly, I'm not half the man I used to be. There's a shadow hanging over me. Oh, yesterday came suddenly."
       }
@@ -21,7 +21,7 @@
   ],
   "demo_song_002": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/demo_song_002_melody_GT_original.mp3",
         "content": "Imagine there's no heaven, it's easy if you try. No hell below us, above us only sky. Imagine all the people living for today. Imagine there's no countries, it isn't hard to do. Nothing to kill or die for, and no religion too."
       }
@@ -41,7 +41,7 @@
   ],
   "demo_song_003": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/demo_song_003_melody_GT_original.mp3",
         "content": "We are the champions, my friends. And we'll keep on fighting till the end. We are the champions, we are the champions. No time for losers, 'cause we are the champions of the world."
       }

@@ -27,13 +27,13 @@ interface ABTestRowProps {
 function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTestRowProps) {
   const { uuid, ...variants } = item;
 
-  const gtData = variants['melody_GT'];
+  const gtData = variants['GT'];
   const gtContentText = isAudioData(gtData) 
     ? gtData.content
     : undefined;
 
   // Filter out ground truth from selectable options
-  const variantKeys = Object.keys(variants).filter(key => key !== 'melody_GT');
+  const variantKeys = Object.keys(variants).filter(key => key !== 'GT');
   
   // Deterministic shuffle based on uuid for consistent blind testing
   const shuffledKeys = useMemo(() => {

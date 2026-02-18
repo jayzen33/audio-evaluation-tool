@@ -64,7 +64,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
     return ids;
   }, [variants]);
 
-  const gtData = variants['melody_GT'];
+  const gtData = variants['GT'];
   const gtContentText = isAudioData(gtData) 
     ? gtData.content
     : undefined;
@@ -74,14 +74,14 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
   
   // Generate stable random order for variants (GT first)
   const sortedKeys = useMemo(() => {
-    const nonGtKeys = variantKeys.filter(k => k !== 'melody_GT');
+    const nonGtKeys = variantKeys.filter(k => k !== 'GT');
     // Use hash-based shuffle for stable random order
     const shuffled = [...nonGtKeys].sort((a, b) => {
       const hashA = generateStableId(a).charCodeAt(3);
       const hashB = generateStableId(b).charCodeAt(3);
       return hashA - hashB;
     });
-    return ['melody_GT', ...shuffled].filter(k => variantKeys.includes(k));
+    return ['GT', ...shuffled].filter(k => variantKeys.includes(k));
   }, [variantKeys]);
 
   // Calculate completion for this item
@@ -136,7 +136,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
 
             const audioSrc = data.wav;
             const contentText = data.content;
-            const isGt = key === 'melody_GT';
+            const isGt = key === 'GT';
             const scoreKey = `${uuid}:${key}`;
             const currentScore = scores[scoreKey] || null;
             const audioKey = `${uuid}:${key}`;

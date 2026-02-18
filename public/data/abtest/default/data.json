@@ -1,7 +1,7 @@
 {
   "test_song_alpha": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/test_song_alpha_melody_GT_gt.mp3",
         "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
       }
@@ -21,7 +21,7 @@
   ],
   "test_song_beta": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/test_song_beta_melody_GT_gt.mp3",
         "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
       }
