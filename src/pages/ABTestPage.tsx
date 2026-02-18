@@ -128,12 +128,21 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
               <div 
                 key={key}
                 onClick={() => handleCardClick(key)}
-                className={`rounded-xl p-4 cursor-pointer transition-all duration-200 relative ${
+                className={`rounded-xl p-4 cursor-pointer transition-all duration-200 relative group ${
                   isThisSelected
                     ? 'bg-emerald-50 border-2 border-emerald-400 shadow-md ring-2 ring-emerald-200'
                     : 'bg-slate-50 border-2 border-slate-100 hover:border-slate-300 hover:bg-slate-100'
                 }`}
               >
+                {/* Hover play hint */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none rounded-xl bg-black/5">
+                  <div className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-slate-700 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+
                 {/* Selection indicator */}
                 <div className="absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
                   <button
