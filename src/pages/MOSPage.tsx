@@ -89,7 +89,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
 
       {/* Variants with MOS rating */}
       <div className="p-4">
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedKeys.map((key) => {
             const data = variants[key];
             if (!isAudioData(data)) return null;
@@ -109,72 +109,66 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                     : 'bg-slate-50 border border-slate-200'
                 }`}
               >
-                <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                  {/* Left: Audio & Label */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${
-                        isGt 
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-sm' 
-                          : 'bg-white text-slate-600 border border-slate-200'
-                      }`}>
-                        {isGt && (
-                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                        {isGt ? 'Ground Truth' : key}
-                      </span>
-                      {currentScore !== null && !isGt && (
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white ${mosLabels[currentScore].color}`}>
-                          {currentScore} - {mosLabels[currentScore].label}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <AudioPlayer src={audioSrc} isGt={isGt} />
-                    
-                    <div className="mt-3">
-                      <ContentDisplay 
-                        text={contentText} 
-                        originalText={isGt ? undefined : gtContentText}
-                        className="h-24 overflow-y-auto"
-                        isGt={isGt}
-                      />
-                    </div>
-                  </div>
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${
+                    isGt 
+                      ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-sm' 
+                      : 'bg-white text-slate-600 border border-slate-200'
+                  }`}>
+                    {isGt && (
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {isGt ? 'Ground Truth' : key}
+                  </span>
+                  {currentScore !== null && !isGt && (
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white ${mosLabels[currentScore].color}`}>
+                      {currentScore} - {mosLabels[currentScore].label}
+                    </span>
+                  )}
+                </div>
+                
+                {/* Audio Player */}
+                <AudioPlayer src={audioSrc} isGt={isGt} />
 
-                  {/* Right: MOS Rating */}
-                  <div className="lg:w-72 flex-shrink-0">
-                    <div className="text-xs font-medium text-slate-500 mb-2">
-                      {isGt ? 'Reference (not rated)' : 'Rate audio quality:'}
-                    </div>
+                {/* MOS Rating - directly below audio */}
+                {!isGt && (
+                  <div className="mt-3">
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((score) => (
                         <button
                           key={score}
-                          disabled={isGt}
                           onClick={() => onScoreChange(scoreKey, currentScore === score ? null : (score as MOSScore))}
                           title={`${score} - ${mosLabels[score].label}: ${mosLabels[score].description}`}
-                          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            isGt
-                              ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                              : currentScore === score
-                                ? `${mosLabels[score].color} text-white shadow-md scale-105`
-                                : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                          className={`flex-1 py-1.5 rounded text-xs font-medium transition-all duration-200 ${
+                            currentScore === score
+                              ? `${mosLabels[score].color} text-white shadow-md`
+                              : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                           }`}
                         >
                           {score}
                         </button>
                       ))}
                     </div>
-                    {currentScore !== null && !isGt && (
-                      <div className="mt-2 text-xs text-slate-500">
+                    {currentScore !== null && (
+                      <div className="mt-1.5 text-xs text-slate-500">
                         <span className="font-medium">{mosLabels[currentScore].label}:</span>{' '}
                         {mosLabels[currentScore].description}
                       </div>
                     )}
                   </div>
+                )}
+
+                {/* Content */}
+                <div className="mt-3">
+                  <ContentDisplay 
+                    text={contentText} 
+                    originalText={isGt ? undefined : gtContentText}
+                    className="h-20 overflow-y-auto"
+                    isGt={isGt}
+                  />
                 </div>
               </div>
             );
