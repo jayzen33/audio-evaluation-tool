@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { isAudioData } from '../types';
 import type { AudioItem } from '../types';
-import { AudioPlayer } from './AudioPlayer';
+import { AudioPlayer, type AudioPlayerRef } from './AudioPlayer';
 import { ContentDisplay } from './ContentDisplay';
 import { TagButton, TagBadge, type TagValue } from './TagButton';
 
@@ -14,6 +14,15 @@ interface AudioComparisonRowProps {
 
 export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, index, tags, onTagChange }) => {
   const { uuid, ...variants } = item;
+
+  const audioPlayerRefs = useRef<Record<string, AudioPlayerRef>>({});
+
+  const handleCardClick = (audioKey: string) => {
+    const playerRef = audioPlayerRefs.current[audioKey];
+    if (playerRef) {
+      playerRef.toggle();
+    }
+  };
 
   const gtData = variants['GT'];
   const gtContentText = isAudioData(gtData) 
@@ -64,6 +73,7 @@ export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, in
             return (
               <div 
                 key={key} 
+                onClick={() => handleCardClick(key)}
                 className={`rounded-xl p-4 transition-all duration-200 relative ${
                   isGt 
                     ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 shadow-sm' 
@@ -96,20 +106,26 @@ export const AudioComparisonRow: React.FC<AudioComparisonRowProps> = ({ item, in
                   
                   {/* Tag Button - only show for non-GT variants */}
                   {!isGt && (
-                    <TagButton 
-                      value={currentTag} 
-                      onChange={(value) => onTagChange(key, value)} 
-                    />
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <TagButton 
+                        value={currentTag} 
+                        onChange={(value) => onTagChange(key, value)} 
+                      />
+                    </div>
                   )}
                 </div>
                 
                 {/* Audio Player */}
                 <div className="mb-3">
-                  <AudioPlayer src={audioSrc} isGt={isGt} />
+                  <AudioPlayer 
+                    ref={(el) => { audioPlayerRefs.current[key] = el!; }} 
+                    src={audioSrc} 
+                    isGt={isGt} 
+                  />
                 </div>
                 
                 {/* Content */}
-                <div>
+                <div onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center gap-1.5 mb-2">
                     <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

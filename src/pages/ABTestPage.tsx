@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
-import { AudioPlayer } from '../components/AudioPlayer';
+import { AudioPlayer, type AudioPlayerRef } from '../components/AudioPlayer';
 import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
 import { UserSelector } from '../components/UserSelector';
@@ -26,6 +26,15 @@ interface ABTestRowProps {
 
 function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTestRowProps) {
   const { uuid, ...variants } = item;
+
+  const audioPlayerRefs = useRef<Record<string, AudioPlayerRef>>({});
+
+  const handleCardClick = (audioKey: string) => {
+    const playerRef = audioPlayerRefs.current[audioKey];
+    if (playerRef) {
+      playerRef.toggle();
+    }
+  };
 
   const gtData = variants['GT'];
   const gtContentText = isAudioData(gtData) 
@@ -118,7 +127,7 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
             return (
               <div 
                 key={key}
-                onClick={() => onSelect(key)}
+                onClick={() => handleCardClick(key)}
                 className={`rounded-xl p-4 cursor-pointer transition-all duration-200 relative ${
                   isThisSelected
                     ? 'bg-emerald-50 border-2 border-emerald-400 shadow-md ring-2 ring-emerald-200'
@@ -126,18 +135,20 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
                 }`}
               >
                 {/* Selection indicator */}
-                <div className="absolute top-3 right-3">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    isThisSelected
-                      ? 'bg-emerald-500 border-emerald-500'
-                      : 'border-slate-300 bg-white'
-                  }`}>
+                <div className="absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() => onSelect(key)}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      isThisSelected
+                        ? 'bg-emerald-500 border-emerald-500'
+                        : 'border-slate-300 bg-white hover:border-emerald-300'
+                    }`}>
                     {isThisSelected && (
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
-                  </div>
+                  </button>
                 </div>
 
                 {/* Variant Label */}
@@ -153,7 +164,11 @@ function ABTestRow({ item, index, selectedVariant, onSelect, blindMode }: ABTest
                 
                 {/* Audio Player */}
                 <div className="mb-3">
-                  <AudioPlayer src={audioSrc} isGt={false} />
+                  <AudioPlayer 
+                    ref={(el) => { audioPlayerRefs.current[key] = el!; }} 
+                    src={audioSrc} 
+                    isGt={false} 
+                  />
                 </div>
                 
                 {/* Content */}
