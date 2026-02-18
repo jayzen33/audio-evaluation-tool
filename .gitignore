@@ -54,3 +54,5 @@ venv
 *.db
 **__pycache__**
 .env*
+
+public/data
