@@ -183,6 +183,8 @@ src/
 
 ### Git Conventions
 
+- **Always seek user approval before performing any Git operations that modify the repository state** (commit, push, pull, branch, reset, rebase, etc.)
+- Read-only operations (status, log, diff, show, etc.) do not require approval
 - Create feature branches: `git checkout -b feature/your-feature`
 - Use clear, descriptive commit messages
 - Run `npm run lint` before committing
