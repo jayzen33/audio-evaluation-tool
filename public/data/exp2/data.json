@@ -1,7 +1,7 @@
 {
   "experiment_2_song_1": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/experiment_2_song_1_melody_GT_original.mp3",
         "content": "Hotel California, such a lovely place, such a lovely face. Plenty of room at the Hotel California, any time of year, you can find it here."
       }
@@ -27,7 +27,7 @@
   ],
   "experiment_2_song_2": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/experiment_2_song_2_melody_GT_original.mp3",
         "content": "Sweet home Alabama, where the skies are so blue. Sweet home Alabama, Lord I'm coming home to you."
       }
@@ -59,7 +59,7 @@
   ],
   "experiment_2_song_3": [
     {
-      "melody_GT": {
+      "GT": {
         "wav": "/audio/experiment_2_song_3_melody_GT_original.mp3",
         "content": "Bohemian Rhapsody, caught in a landslide, no escape from reality. Open your eyes, look up to the skies and see."
       }
