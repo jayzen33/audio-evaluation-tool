@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { AudioItem, AudioData } from '../types';
 import { isAudioData } from '../types';
-import { AudioPlayer } from '../components/AudioPlayer';
+import { AudioPlayer, type AudioPlayerRef } from '../components/AudioPlayer';
 import { ContentDisplay } from '../components/ContentDisplay';
 import { Logo } from '../components/Logo';
 import { UserSelector } from '../components/UserSelector';
@@ -60,6 +60,15 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
   }).length;
   const isComplete = scoredCount === sortedKeys.length;
 
+  const audioPlayerRefs = useRef<Record<string, AudioPlayerRef>>({});
+
+  const handleCardClick = (audioSrc: string) => {
+    const playerRef = audioPlayerRefs.current[audioSrc];
+    if (playerRef) {
+      playerRef.toggle();
+    }
+  };
+
   return (
     <div className={`bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition-all duration-300 ${
       isComplete ? 'border-emerald-200' : 'border-slate-200'
@@ -99,6 +108,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
             const isGt = key === 'melody_GT';
             const scoreKey = `${uuid}:${key}`;
             const currentScore = scores[scoreKey] || null;
+            const audioKey = `${uuid}:${key}`;
 
             return (
               <div 
@@ -108,6 +118,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                     ? 'bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200' 
                     : 'bg-slate-50 border border-slate-200'
                 }`}
+                onClick={() => handleCardClick(audioKey)}
               >
                 {/* Label */}
                 <div className="flex items-center gap-2 mb-3">
@@ -131,11 +142,15 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                 </div>
                 
                 {/* Audio Player */}
-                <AudioPlayer src={audioSrc} isGt={isGt} />
+                <AudioPlayer 
+                  ref={(el) => { audioPlayerRefs.current[audioKey] = el!; }} 
+                  src={audioSrc} 
+                  isGt={isGt} 
+                />
 
                 {/* MOS Rating - directly below audio */}
                 {!isGt && (
-                  <div className="mt-3">
+                  <div className="mt-3" onClick={(e) => e.stopPropagation()}>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((score) => (
                         <button
@@ -162,7 +177,7 @@ function MOSRow({ item, index, scores, onScoreChange }: MOSRowProps) {
                 )}
 
                 {/* Content */}
-                <div className="mt-3">
+                <div className="mt-3" onClick={(e) => e.stopPropagation()}>
                   <ContentDisplay 
                     text={contentText} 
                     originalText={isGt ? undefined : gtContentText}
