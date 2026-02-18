@@ -2,54 +2,54 @@
   "demo_song_001": [
     {
       "GT": {
-        "wav": "/audio/demo_song_001_melody_GT_original.mp3",
-        "content": "Yesterday, all my troubles seemed so far away. Now it looks as though they're here to stay. Oh, I believe in yesterday. Suddenly, I'm not half the man I used to be. There's a shadow hanging over me. Oh, yesterday came suddenly."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "rebuild_01": {
-        "wav": "/audio/demo_song_001_rebuild_01_v1.wav",
-        "content": "Yesterday, all my troubles seemed so far away. Now it looks as though they're here to stay. Oh, I believe in yesterday. Suddenly, I'm not half the man I used to be. There's a shadow hanging over me. Oh, yesterday came suddenly."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "rebuild_02": {
-        "wav": "/audio/demo_song_001_rebuild_02_v2.wav",
-        "content": "Yesterday, all my problems seemed so far away. Now it looks as though they're here to stay. Oh, I believe in yesterday. Suddenly, I'm not half the person I used to be. There's a cloud hanging over me. Oh, yesterday came suddenly."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     }
   ],
   "demo_song_002": [
     {
       "GT": {
-        "wav": "/audio/demo_song_002_melody_GT_original.mp3",
-        "content": "Imagine there's no heaven, it's easy if you try. No hell below us, above us only sky. Imagine all the people living for today. Imagine there's no countries, it isn't hard to do. Nothing to kill or die for, and no religion too."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "rebuild_01": {
-        "wav": "/audio/demo_song_002_rebuild_01_v1.wav",
-        "content": "Imagine there's no heaven, it's easy if you try. No hell below us, above us only sky. Imagine all the people living for today. Imagine there's no countries, it isn't hard to do. Nothing to kill or die for, and no religion too."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "rebuild_02": {
-        "wav": "/audio/demo_song_002_rebuild_02_v2.wav",
-        "content": "Imagine there's no heaven, it's simple if you try. No hell beneath us, above us only sky. Imagine all the people living for today. Imagine there's no borders, it isn't hard to do. Nothing to kill or die for, and no religion too."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     }
   ],
   "demo_song_003": [
     {
       "GT": {
-        "wav": "/audio/demo_song_003_melody_GT_original.mp3",
-        "content": "We are the champions, my friends. And we'll keep on fighting till the end. We are the champions, we are the champions. No time for losers, 'cause we are the champions of the world."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "rebuild_01": {
-        "wav": "/audio/demo_song_003_rebuild_01_v1.wav",
-        "content": "We are the champions, my friends. And we'll keep on fighting till the end. We are the champions, we are the champions. No time for losers, 'cause we are the champions of the world."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     }
   ]

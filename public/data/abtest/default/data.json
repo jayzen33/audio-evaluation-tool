@@ -2,40 +2,40 @@
   "test_song_alpha": [
     {
       "GT": {
-        "wav": "/audio/test_song_alpha_melody_GT_gt.mp3",
-        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "model_a": {
-        "wav": "/audio/test_song_alpha_baseline_b1.wav",
-        "content": "Let it be, let it be, let it be, let it be. Whisper words of wisdom, let it be."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "model_b": {
-        "wav": "/audio/test_song_alpha_model_a_m1.wav",
-        "content": "Let it be, let it be, let it be, let it be. Whisper some wisdom, let it be."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     }
   ],
   "test_song_beta": [
     {
       "GT": {
-        "wav": "/audio/test_song_beta_melody_GT_gt.mp3",
-        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "model_a": {
-        "wav": "/audio/test_song_beta_baseline_b1.wav",
-        "content": "Hey Jude, don't make it bad. Take a sad song and make it better."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     },
     {
       "model_b": {
-        "wav": "/audio/test_song_beta_model_a_m1.wav",
-        "content": "Hey Jude, don't make it bad. Take a sad tune and make it better."
+        "wav": "/audio/Alto-1_1.wav",
+        "content": "你看过了许多美景，你看过了许多美女，你迷失在地图上每一道短暂的光阴。"
       }
     }
   ]
